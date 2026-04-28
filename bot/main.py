@@ -1,10 +1,9 @@
 import asyncio
 import os
-
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
-from db.base import engine
+from db.base import engine, AsyncSessionLocal
 from db.models import Base
 from bot.handlers.start import router as start_router
 from bot.handlers.cases import router as cases_router
@@ -21,11 +20,11 @@ dp.include_router(subscriptions_router)
 
 
 async def main():
-    # Создаём таблицы
+    # Создаём таблицы при старте
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    print("🚀 Arbitr Subscribe Bot запущен")
+    print("🚀 Arbitr Subscribe Bot успешно запущен!")
     await dp.start_polling(bot)
 
 
